@@ -1,0 +1,86 @@
+<h1>講師名を入れると、複数入力フォームが生成される</h1>
+    <div id="inputs">
+      <input type="text" id="techers" >
+      <input type="button" onclick="getTecher()" value="入力">
+    </div>
+    <table border="1" id="table" style="display: none;">
+      <tr>
+        <th>講師名</th>
+        <th>1コマ</th>
+        <th>2コマ</th>
+        <th>3コマ</th>
+        <th>4コマ</th>
+        <th>5コマ</th>
+        <th>6コマ</th>
+        <th>7コマ</th>
+        <th>8コマ</th>
+      </tr>
+  
+      <tr id="form0" style="display: none;">
+        <td>
+          <input type="text">
+        </td>
+        <td>
+          <p>◯コマ</p>
+        </td>
+        <td>
+          <p>◯コマ</p>
+        </td>
+        <td>
+          <p>◯コマ</p>
+        </td>
+        <td>
+          <p>◯コマ</p>
+        </td>
+        <td>
+          <p>◯コマ</p>
+        </td>
+        <td>
+          <p>◯コマ</p>
+        </td>
+        <td>
+          <p>◯コマ</p>
+        </td>
+        <td>
+          <p>◯コマ</p>
+        </td>
+      </tr>
+    </table>
+​
+    <script>
+      const ignore = ["○●", "●●"] //無視する要素を設定
+      let techers = []
+      let techers_full_name = [] //とりあえず空の配列を定義
+      function getTecher(){
+        techers.splice(0)
+        techers_full_name.splice(0)//配列をリセット
+        techers = document.getElementById("techers") 
+        techers = techers.value.split("　") //全角空白で区切って配列を作成
+        techers = techers.filter(value => !ignore.includes(value) ) //名前のみを抽出（いらないものを削除）
+        for (var i = 0; i < techers.length; i = i + 2) {
+          techers_full_name.push(techers[i] + techers[i+1])
+        } //名字と名前を一つにして配列に入れる
+        
+​
+        for (var i = 0; i < techers_full_name.length; i++){
+          // 複製するHTML要素を取得
+          var formx="form"+ i
+          var form = document.getElementById(formx);
+​
+          // 複製
+          var clone_form = form.cloneNode(true);
+​
+          // 複製した要素の属性を編集
+          var i_1 = i+1
+          var formy = "form" + i_1
+          clone_form.id = formy
+          clone_form.style = "display: ;"
+          clone_form.querySelector("td").querySelector("input").value = techers_full_name[i]
+​
+          // 複製したHTML要素をページに挿入
+          form.after(clone_form);
+        }
+        document.getElementById("table").style = "display: ;"
+        document.getElementById("inputs").style = "display: none;"
+      }
+    </script>
